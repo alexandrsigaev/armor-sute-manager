@@ -1,14 +1,21 @@
 package ru.sigaevaleksandr.armorsutemanager.model;
 
-public class Armor {
-    Integer id;
-    String nameArmor;
-    String artifact;
+import java.util.Objects;
 
-    public Armor(Integer id, String nameArmor, String artifact) {
+public class Armor {
+    private Integer id;
+    private String nameArmor;
+    private String artifact;
+    private Costume costume;
+
+    public Armor() {
+    }
+
+    public Armor(Integer id, String nameArmor, String artifact, Costume costume) {
         this.id = id;
         this.nameArmor = nameArmor;
         this.artifact = artifact;
+        this.costume = costume;
     }
 
     public Integer getId() {
@@ -33,5 +40,32 @@ public class Armor {
 
     public void setArtifact(String artifact) {
         this.artifact = artifact;
+    }
+
+    public Costume getCostume() {
+        return costume;
+    }
+
+    public void setCostume(Costume costume) {
+        this.costume = costume;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Armor armor = (Armor) o;
+        return Objects.equals(nameArmor, armor.nameArmor)
+                && Objects.equals(artifact, armor.artifact)
+                && Objects.equals(costume, armor.costume);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nameArmor, artifact, costume);
     }
 }
