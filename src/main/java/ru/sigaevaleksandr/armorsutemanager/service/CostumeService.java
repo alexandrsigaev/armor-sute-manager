@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface CostumeService {
 
-    boolean addCostume(Costume person);
-    boolean updateCostume(Costume costume);
-    List<Costume> getAllCostume();
-    Optional<Costume> getCostumeByName();
+    List<Costume> findAll();
+    Optional<Costume> findById(int id);
+    Costume save(Costume costume);
+    void delete(Costume costume);
 
 }

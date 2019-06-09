@@ -17,23 +17,26 @@ public class CostumeServiceImpl implements CostumeService {
         this.costumeDAO = costumeDAO;
     }
 
+
     @Override
-    public boolean addCostume(Costume person) {
-        return false;
+    public List<Costume> findAll() {
+        return costumeDAO.findAll();
     }
 
     @Override
-    public boolean updateCostume(Costume costume) {
-        return false;
+    public Optional<Costume> findById(int id) {
+        return costumeDAO.findById(id);
     }
 
     @Override
-    public List<Costume> getAllCostume() {
-        return null;
+    public Costume save(Costume costume) {
+        int id = costumeDAO.persist(costume);
+        costume.setId(id);
+        return costume;
     }
 
     @Override
-    public Optional<Costume> getCostumeByName() {
-        return Optional.empty();
+    public void delete(Costume costume) {
+        costumeDAO.delete(costume);
     }
 }

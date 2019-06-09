@@ -1,11 +1,15 @@
 package ru.sigaevaleksandr.armorsutemanager.dao.impl;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.sigaevaleksandr.armorsutemanager.dao.ArmorDAO;
 import ru.sigaevaleksandr.armorsutemanager.dao.util.ArmorMapper;
 import ru.sigaevaleksandr.armorsutemanager.model.Armor;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +24,18 @@ public class ArmorDAOImpl implements ArmorDAO {
 
     @Override
     public int persist(Armor entity) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         // language=sql
         String persistSql = "insert into armor (id_costume, name_armor, artifact) values (?, ?, ?)";
-        return jdbcTemplate.update(persistSql, entity.getIdCostume(), entity.getNameArmor(), entity.getArtifact());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(persistSql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, entity.getIdCostume());
+            ps.setString(2, entity.getNameArmor());
+            ps.setString(3, entity.getArtifact());
+            return ps;
+        }, keyHolder);
+        return keyHolder.getKeys().size() > 1 ? (Integer) keyHolder.getKeys().get("id") : keyHolder.getKey().intValue();
     }
 
     @Override
@@ -35,7 +48,7 @@ public class ArmorDAOImpl implements ArmorDAO {
     @Override
     public Optional<Armor> findById(Integer id) {
         // language=sql
-        String findByIdSql = "select * into armor where id = ?";
+        String findByIdSql = "select * from armor where id = ?";
         return Optional.ofNullable(jdbcTemplate.queryForObject(findByIdSql, new Object[] {id}, new ArmorMapper()));
     }
 
@@ -49,7 +62,7 @@ public class ArmorDAOImpl implements ArmorDAO {
     @Override
     public List<Armor> findAll() {
         // language=sql
-        String findAll = "select * into armor";
+        String findAll = "select * from armor";
         return jdbcTemplate.query(findAll, new ArmorMapper());
     }
 }

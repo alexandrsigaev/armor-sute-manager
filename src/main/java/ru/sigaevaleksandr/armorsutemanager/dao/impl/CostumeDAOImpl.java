@@ -1,12 +1,15 @@
 package ru.sigaevaleksandr.armorsutemanager.dao.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.sigaevaleksandr.armorsutemanager.dao.CostumeDAO;
 import ru.sigaevaleksandr.armorsutemanager.dao.util.CostumeExtractor;
 import ru.sigaevaleksandr.armorsutemanager.model.Costume;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,9 +24,18 @@ public class CostumeDAOImpl implements CostumeDAO {
 
     @Override
     public int persist(Costume entity) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         // language=sql
         String persistSql = "insert into costume (name_costume, max_count_armor) VALUES (?, ?)";
-        return this.jdbcTemplate.update(persistSql, entity.getNameCostume(), entity.getMaxCountArmor());
+        //return this.jdbcTemplate.update(persistSql, entity.getNameCostume(), entity.getMaxCountArmor());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(persistSql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, entity.getNameCostume());
+            ps.setInt(2, entity.getMaxCountArmor());
+            return ps;
+        }, keyHolder);
+        return keyHolder.getKeys().size() > 1 ? (Integer) keyHolder.getKeys().get("id") : keyHolder.getKey().intValue();
     }
 
     @Override
