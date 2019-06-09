@@ -1,0 +1,24 @@
+language: java
+jdk:
+  --openjdk8
+sudo: false
+
+services:
+  - postgresql
+
+before_install:
+  - psql -c 'create database hibernate;' -U postgres
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  email:
+    recipients:
+      - sigaev.aleksandr.v@yandex.ru
+    on_success: never
+    on_failure: always
+
+env:
+  global:
+    - CODECOV_TOKEN="392ad49b-e4b4-4c35-bdc5-4814cda052a9"

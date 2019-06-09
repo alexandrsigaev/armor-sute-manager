@@ -1,5 +1,6 @@
 package ru.sigaevaleksandr.armorsutemanager.dao.impl;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class CostumeDAOImplTest {
     public void update() {
     }
 
+    @Ignore
     @Test
     public void whenFindById() {
         Optional<Costume> byId = costumeDAO.findById(2);
