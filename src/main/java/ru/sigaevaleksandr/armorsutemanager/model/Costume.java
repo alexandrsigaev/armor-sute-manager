@@ -37,12 +37,8 @@ public class Costume {
         this.nameCostume = nameCostume;
     }
 
-    public int getMaxCountArmor() {
+    public Integer getMaxCountArmor() {
         return maxCountArmor;
-    }
-
-    public void setMaxCountArmor(int maxCountArmor) {
-        this.maxCountArmor = maxCountArmor;
     }
 
     public void setMaxCountArmor(Integer maxCountArmor) {
@@ -81,5 +77,16 @@ public class Costume {
     @Override
     public int hashCode() {
         return Objects.hash(nameCostume, createDate);
+    }
+
+    @Override
+    public String toString() {
+        return "Costume{"
+                + "id=" + id
+                + ", nameCostume='" + nameCostume + '\''
+                + ", maxCountArmor=" + maxCountArmor
+                + ", createDate=" + createDate
+                + ", armors=" + armors
+                + '}';
     }
 }

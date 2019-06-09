@@ -7,6 +7,7 @@ import ru.sigaevaleksandr.armorsutemanager.dao.util.ArmorMapper;
 import ru.sigaevaleksandr.armorsutemanager.model.Armor;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ArmorDAOImpl implements ArmorDAO {
@@ -18,31 +19,31 @@ public class ArmorDAOImpl implements ArmorDAO {
     }
 
     @Override
-    public void persist(Armor entity) {
+    public int persist(Armor entity) {
         // language=sql
         String persistSql = "insert into armor (id_costume, name_armor, artifact) values (?, ?, ?)";
-        jdbcTemplate.update(persistSql, entity.getCostume().getId(), entity.getNameArmor(), entity.getArtifact());
+        return jdbcTemplate.update(persistSql, entity.getIdCostume(), entity.getNameArmor(), entity.getArtifact());
     }
 
     @Override
-    public void update(Armor entity) {
+    public int update(Armor entity) {
         // language=sql
         String persistSql = "update armor set name_armor = ?, artifact = ? where id = ?";
-        jdbcTemplate.update(persistSql, entity.getNameArmor(), entity.getArtifact(), entity.getId());
+        return jdbcTemplate.update(persistSql, entity.getNameArmor(), entity.getArtifact(), entity.getId());
     }
 
     @Override
-    public Armor findById(Integer id) {
+    public Optional<Armor> findById(Integer id) {
         // language=sql
         String findByIdSql = "select * into armor where id = ?";
-        return jdbcTemplate.queryForObject(findByIdSql, new Object[] {id}, new ArmorMapper());
+        return Optional.ofNullable(jdbcTemplate.queryForObject(findByIdSql, new Object[] {id}, new ArmorMapper()));
     }
 
     @Override
-    public void delete(Armor entity) {
+    public int delete(Armor entity) {
         // language=sql
         String persistSql = "delete from armor where id = ?";
-        jdbcTemplate.update(persistSql, entity.getId());
+        return jdbcTemplate.update(persistSql, entity.getId());
     }
 
     @Override

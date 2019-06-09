@@ -1,16 +1,16 @@
 package ru.sigaevaleksandr.armorsutemanager.dao;
 
-import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 public interface Repository<T, Id> {
-    void persist(T entity);
+    int persist(T entity);
 
-    void update(T entity);
+    int update(T entity);
 
-    T findById(Id id);
+    Optional<T> findById(Id id);
 
-    void delete(T entity);
+    int delete(T entity);
 
     List<T> findAll();
 }

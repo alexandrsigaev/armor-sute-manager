@@ -6,16 +6,15 @@ public class Armor {
     private Integer id;
     private String nameArmor;
     private String artifact;
-    private Costume costume;
-
+    private Integer idCostume;
     public Armor() {
     }
 
-    public Armor(Integer id, String nameArmor, String artifact, Costume costume) {
+    public Armor(Integer id, String nameArmor, String artifact, Integer idCostume) {
         this.id = id;
         this.nameArmor = nameArmor;
         this.artifact = artifact;
-        this.costume = costume;
+        this.idCostume = idCostume;
     }
 
     public Integer getId() {
@@ -42,12 +41,12 @@ public class Armor {
         this.artifact = artifact;
     }
 
-    public Costume getCostume() {
-        return costume;
+    public Integer getIdCostume() {
+        return idCostume;
     }
 
-    public void setCostume(Costume costume) {
-        this.costume = costume;
+    public void setIdCostume(Integer idCostume) {
+        this.idCostume = idCostume;
     }
 
     @Override
@@ -60,12 +59,21 @@ public class Armor {
         }
         Armor armor = (Armor) o;
         return Objects.equals(nameArmor, armor.nameArmor)
-                && Objects.equals(artifact, armor.artifact)
-                && Objects.equals(costume, armor.costume);
+                && Objects.equals(artifact, armor.artifact);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameArmor, artifact, costume);
+        return Objects.hash(nameArmor, artifact);
+    }
+
+    @Override
+    public String toString() {
+        return "Armor{"
+                + "id=" + id
+                + ", nameArmor='" + nameArmor + '\''
+                + ", artifact='" + artifact + '\''
+                + ", idCostume=" + idCostume
+                + '}';
     }
 }
