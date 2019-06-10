@@ -2,6 +2,7 @@ package ru.sigaevaleksandr.armorsutemanager.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.sigaevaleksandr.armorsutemanager.dao.CostumeDAO;
+import ru.sigaevaleksandr.armorsutemanager.exeption.NotFoundException;
 import ru.sigaevaleksandr.armorsutemanager.model.Costume;
 import ru.sigaevaleksandr.armorsutemanager.service.CostumeService;
 
@@ -46,8 +47,11 @@ public class CostumeServiceImpl implements CostumeService {
     }
 
     @Override
-    public double armorLoad(int id) {
+    public double armorLoad(int id) throws NotFoundException {
         Optional<Costume> costume = this.findById(id);
-        return costume.orElse(new Costume()).getLoadArmor();
+        if (!costume.isPresent()) {
+            throw new NotFoundException(String.format("Costume with id %s if not found", id));
+        }
+        return costume.get().getLoadArmor();
     }
 }

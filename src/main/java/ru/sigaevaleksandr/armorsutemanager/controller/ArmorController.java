@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.sigaevaleksandr.armorsutemanager.model.Armor;
 import ru.sigaevaleksandr.armorsutemanager.service.ArmorService;
+import ru.sigaevaleksandr.armorsutemanager.exeption.ServiceException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class ArmorController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Armor> create(@RequestBody Armor armor) {
+    public ResponseEntity<Armor> create(@RequestBody Armor armor) throws ServiceException {
         return new ResponseEntity<Armor>(
                 this.armorService.save(armor),
                 HttpStatus.CREATED
@@ -43,8 +44,8 @@ public class ArmorController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> update(@RequestBody Armor person) {
-        this.armorService.save(person);
+    public ResponseEntity<Void> update(@RequestBody Armor armor) throws ServiceException {
+        this.armorService.update(armor);
         return ResponseEntity.ok().build();
     }
 

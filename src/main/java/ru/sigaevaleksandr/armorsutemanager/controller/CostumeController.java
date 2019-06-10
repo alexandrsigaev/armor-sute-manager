@@ -3,6 +3,7 @@ package ru.sigaevaleksandr.armorsutemanager.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.sigaevaleksandr.armorsutemanager.exeption.NotFoundException;
 import ru.sigaevaleksandr.armorsutemanager.model.Costume;
 import ru.sigaevaleksandr.armorsutemanager.service.CostumeService;
 
@@ -29,7 +30,7 @@ public class CostumeController {
     }
 
     @GetMapping("/fullness/{id}")
-    public Map<String, String> getArmorLoad(@PathVariable int id) {
+    public Map<String, String> getArmorLoad(@PathVariable int id) throws NotFoundException {
         double load = this.costumeService.armorLoad(id);
         return Collections.singletonMap("percent", String.format("%.0f", (load * 100)));
     }

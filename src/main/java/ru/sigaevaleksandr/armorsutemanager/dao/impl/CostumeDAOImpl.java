@@ -50,7 +50,7 @@ public class CostumeDAOImpl implements CostumeDAO {
         // language=sql
         String findCostumeByIdSql = "select c.id as id_cos, c.name_costume, c.max_count_armor,"
                 + " c.create_user_date, a.id as id_arm, a.name_armor, a.artifact"
-                + " from costume c inner join armor a on c.id = a.id_costume where c.id = ?";
+                + " from costume c left join armor a on c.id = a.id_costume where c.id = ?";
 
         List<Costume> resultQuery = this.jdbcTemplate.query(findCostumeByIdSql, new Object[]{id}, new CostumeExtractor());
 
@@ -78,14 +78,14 @@ public class CostumeDAOImpl implements CostumeDAO {
     public List<Costume> findCostumesByParam(String param) {
         // language=sql
         String findCostumesByParam =
-                "select c.id as id_cos, c.name_costume, c.max_count_armor, c.create_user_date, " +
-                "a.id as id_arm, a.name_armor, a.artifact " +
-                        "from costume c inner join armor a on c.id = a.id_costume " +
-                        "where c.id in " +
-                            "(select c.id as id_cos " +
-                            "from costume c inner join armor a on c.id = a.id_costume " +
-                            "where a.artifact LIKE ? ) " +
-                        "order by c.name_costume";
+                "select c.id as id_cos, c.name_costume, c.max_count_armor, c.create_user_date, "
+                        + "a.id as id_arm, a.name_armor, a.artifact "
+                        + "from costume c inner join armor a on c.id = a.id_costume "
+                        + "where c.id in "
+                            + "(select c.id as id_cos "
+                            + "from costume c inner join armor a on c.id = a.id_costume "
+                            + "where a.artifact LIKE ? ) "
+                        + "order by c.name_costume";
 
         return this.jdbcTemplate.query(findCostumesByParam, new Object[] {"%" + param + "%"}, new CostumeExtractor());
     }
