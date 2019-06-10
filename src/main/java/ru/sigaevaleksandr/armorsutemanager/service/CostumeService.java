@@ -11,5 +11,6 @@ public interface CostumeService {
     Optional<Costume> findById(int id);
     Costume save(Costume costume);
     void delete(Costume costume);
-
+    List<Costume> findByArtifact(String param);
+    double armorLoad(int id);
 }

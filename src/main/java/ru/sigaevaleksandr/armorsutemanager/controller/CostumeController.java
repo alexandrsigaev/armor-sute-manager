@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.sigaevaleksandr.armorsutemanager.model.Costume;
 import ru.sigaevaleksandr.armorsutemanager.service.CostumeService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/costume")
@@ -23,6 +21,17 @@ public class CostumeController {
     @GetMapping("/")
     public List<Costume> findAll() {
         return new ArrayList<>(this.costumeService.findAll());
+    }
+
+    @GetMapping("/find")
+    public List<Costume> findByArtifact(@RequestParam(name = "param") String param) {
+        return new ArrayList<>(this.costumeService.findByArtifact(param));
+    }
+
+    @GetMapping("/fullness/{id}")
+    public Map<String, String> getArmorLoad(@PathVariable int id) {
+        double load = this.costumeService.armorLoad(id);
+        return Collections.singletonMap("percent", String.format("%.0f", (load * 100)));
     }
 
     @GetMapping("/{id}")

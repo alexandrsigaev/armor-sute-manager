@@ -35,7 +35,7 @@ public class ArmorDAOImpl implements ArmorDAO {
             ps.setString(3, entity.getArtifact());
             return ps;
         }, keyHolder);
-        return keyHolder.getKeys().size() > 1 ? (Integer) keyHolder.getKeys().get("id") : keyHolder.getKey().intValue();
+        return (Integer) keyHolder.getKeys().get("id");
     }
 
     @Override

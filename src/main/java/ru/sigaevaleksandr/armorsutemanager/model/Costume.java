@@ -61,6 +61,14 @@ public class Costume {
         this.armors = armors;
     }
 
+    public double getLoadArmor() {
+        double load = 0;
+        if (maxCountArmor != null && armors != null) {
+            load = (double) armors.size() / maxCountArmor;
+        }
+        return load;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

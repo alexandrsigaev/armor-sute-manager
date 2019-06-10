@@ -28,11 +28,14 @@ public class CostumeExtractor implements ResultSetExtractor<List<Costume>> {
                 costume.setArmors(new ArrayList<>());
                 map.put(cosId, costume);
             }
-
+            int idArmor = rs.getInt("id_arm");
+            if (idArmor == 0) {
+                continue;
+            }
             Armor armor = new Armor();
-            armor.setId(rs.getInt("id_arm"));
+            armor.setId(idArmor);
             armor.setNameArmor(rs.getString("name_armor"));
-            armor.setArtifact("artifact");
+            armor.setArtifact(rs.getString("artifact"));
             armor.setIdCostume(rs.getInt("id_cos"));
             costume.getArmors().add(armor);
 

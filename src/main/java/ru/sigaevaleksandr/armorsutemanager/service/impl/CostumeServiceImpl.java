@@ -20,23 +20,34 @@ public class CostumeServiceImpl implements CostumeService {
 
     @Override
     public List<Costume> findAll() {
-        return costumeDAO.findAll();
+        return this.costumeDAO.findAll();
     }
 
     @Override
     public Optional<Costume> findById(int id) {
-        return costumeDAO.findById(id);
+        return this.costumeDAO.findById(id);
     }
 
     @Override
     public Costume save(Costume costume) {
-        int id = costumeDAO.persist(costume);
+        int id = this.costumeDAO.persist(costume);
         costume.setId(id);
         return costume;
     }
 
     @Override
     public void delete(Costume costume) {
-        costumeDAO.delete(costume);
+        this.costumeDAO.delete(costume);
+    }
+
+    @Override
+    public List<Costume> findByArtifact(String param) {
+        return this.costumeDAO.findCostumesByParam(param);
+    }
+
+    @Override
+    public double armorLoad(int id) {
+        Optional<Costume> costume = this.findById(id);
+        return costume.orElse(new Costume()).getLoadArmor();
     }
 }

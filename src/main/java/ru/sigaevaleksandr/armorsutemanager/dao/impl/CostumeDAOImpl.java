@@ -35,7 +35,7 @@ public class CostumeDAOImpl implements CostumeDAO {
             ps.setInt(2, entity.getMaxCountArmor());
             return ps;
         }, keyHolder);
-        return keyHolder.getKeys().size() > 1 ? (Integer) keyHolder.getKeys().get("id") : keyHolder.getKey().intValue();
+        return (Integer) keyHolder.getKeys().get("id");
     }
 
     @Override
@@ -69,8 +69,24 @@ public class CostumeDAOImpl implements CostumeDAO {
         // language=sql
         String findAllCostume = "select c.id as id_cos, c.name_costume, c.max_count_armor, c.create_user_date, "
                 + "a.id as id_arm, a.name_armor, a.artifact from costume c "
-                + "inner join armor a on c.id = a.id_costume order by c.id";
+                + "left join armor a on c.id = a.id_costume order by c.id";
 
         return this.jdbcTemplate.query(findAllCostume, new CostumeExtractor());
+    }
+
+    @Override
+    public List<Costume> findCostumesByParam(String param) {
+        // language=sql
+        String findCostumesByParam =
+                "select c.id as id_cos, c.name_costume, c.max_count_armor, c.create_user_date, " +
+                "a.id as id_arm, a.name_armor, a.artifact " +
+                        "from costume c inner join armor a on c.id = a.id_costume " +
+                        "where c.id in " +
+                            "(select c.id as id_cos " +
+                            "from costume c inner join armor a on c.id = a.id_costume " +
+                            "where a.artifact LIKE ? ) " +
+                        "order by c.name_costume";
+
+        return this.jdbcTemplate.query(findCostumesByParam, new Object[] {"%" + param + "%"}, new CostumeExtractor());
     }
 }
