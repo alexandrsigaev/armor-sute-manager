@@ -11,6 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.sigaevaleksandr.armorsutemanager.model.Armor;
 import ru.sigaevaleksandr.armorsutemanager.model.Costume;
+import ru.sigaevaleksandr.armorsutemanager.model.CostumeStatus;
+import ru.sigaevaleksandr.armorsutemanager.model.CostumeType;
 import ru.sigaevaleksandr.armorsutemanager.service.CostumeService;
 
 import java.util.ArrayList;
@@ -33,8 +35,9 @@ public class CostumeControllerTest {
 
     @Test
     public void whenFindAll() throws Exception {
-        Armor armor = new Armor(1, "test", "test", 1);
-        Costume costume = new Costume(1, "MARK1", 3, Lists.newArrayList(armor));
+        Armor armor = new Armor(1, "test", "test", 1, 0, 1);
+        Costume costume = new Costume(1, "MARK1", 3, CostumeType.WARRIOR,
+                Lists.newArrayList(armor), CostumeStatus.RELEASE);
         given(this.costumeService.findAll())
                 .willReturn(
                         new ArrayList<>(Lists.newArrayList(costume)
@@ -55,8 +58,9 @@ public class CostumeControllerTest {
 
     @Test
     public void whenFindByArtifact() throws Exception {
-        Armor armor = new Armor(1, "test", "test", 1);
-        Costume costume = new Costume(1, "MARK1", 3, Lists.newArrayList(armor));
+        Armor armor = new Armor(1, "test", "test", 1, 0, 1);
+        Costume costume = new Costume(1, "MARK1", 3, CostumeType.WARRIOR,
+                Lists.newArrayList(armor), CostumeStatus.RELEASE);
         given(this.costumeService.findByArtifact("test"))
                 .willReturn(
                         new ArrayList<>(Lists.newArrayList(costume))
@@ -76,8 +80,9 @@ public class CostumeControllerTest {
 
     @Test
     public void whenGetArmorLoad() throws Exception {
-        Armor armor = new Armor(1, "test", "test", 1);
-        Costume costume = new Costume(1, "MARK1", 1, Lists.newArrayList(armor));
+        Armor armor = new Armor(1, "test", "test", 1, 0, 1);
+        Costume costume = new Costume(1, "MARK1", 3, CostumeType.WARRIOR,
+                Lists.newArrayList(armor), CostumeStatus.RELEASE);
 
         given(this.costumeService.armorLoad(1))
                 .willReturn(
@@ -95,8 +100,9 @@ public class CostumeControllerTest {
 
     @Test
     public void whenFindById() throws Exception {
-        Armor armor = new Armor(1, "test", "test", 1);
-        Costume costume = new Costume(1, "MARK1", 3, Lists.newArrayList(armor));
+        Armor armor = new Armor(1, "test", "test", 1, 0, 1);
+        Costume costume = new Costume(1, "MARK1", 3, CostumeType.WARRIOR,
+                Lists.newArrayList(armor), CostumeStatus.RELEASE);
         given(this.costumeService.findById(1))
                 .willReturn(
                         Optional.of(costume)
@@ -115,8 +121,9 @@ public class CostumeControllerTest {
 
     @Test
     public void whenCreate() throws Exception {
-        Armor armor = new Armor(1, "test", "test", 1);
-        Costume costume = new Costume(1, "MARK1", 3, Lists.newArrayList(armor));
+        Armor armor = new Armor(1, "test", "test", 1, 0, 1);
+        Costume costume = new Costume(1, "MARK1", 3, CostumeType.WARRIOR,
+                Lists.newArrayList(armor), CostumeStatus.RELEASE);
         given(this.costumeService.save(costume))
                 .willReturn(costume);
 

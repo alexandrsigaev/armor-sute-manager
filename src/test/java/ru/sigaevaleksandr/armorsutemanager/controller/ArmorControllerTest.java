@@ -32,7 +32,7 @@ public class ArmorControllerTest {
 
     @Test
     public void whenFindAll() throws Exception {
-        Armor armor = new Armor(1, "test", "test", 1);
+        Armor armor = new Armor(1, "test", "test", 1, 0, 1);
         given(this.armorService.findAll())
                 .willReturn(
                         new ArrayList<>(Lists.newArrayList(armor)
@@ -50,7 +50,7 @@ public class ArmorControllerTest {
 
     @Test
     public void whenFindById() throws Exception {
-        Armor armor = new Armor(1, "test", "test", 1);
+        Armor armor = new Armor(1, "test", "test", 1, 0, 1);
         given(this.armorService.findById(1))
                 .willReturn(
                         Optional.of(armor)
@@ -67,7 +67,7 @@ public class ArmorControllerTest {
 
     @Test
     public void whenCreate() throws Exception {
-        Armor armor = new Armor(1, "test", "test", 1);
+        Armor armor = new Armor(1, "test", "test", 1, 0, 1);
         given(this.armorService.save(armor))
                 .willReturn(armor);
 

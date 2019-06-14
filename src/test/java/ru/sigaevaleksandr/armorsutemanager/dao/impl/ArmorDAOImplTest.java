@@ -34,7 +34,8 @@ public class ArmorDAOImplTest {
 
     @Test
     public void whenPersistArmor() {
-        Armor armor = new Armor(null, "gun", "power", this.costume.getId());
+        Armor armor = new Armor(null, "gun", "power",
+                1, 0, this.costume.getId());
         Integer id = this.armorDAO.persist(armor);
         Optional<Armor> cond = this.armorDAO.findById(id);
         assertTrue(cond.isPresent());
@@ -43,7 +44,8 @@ public class ArmorDAOImplTest {
 
     @Test
     public void whenUpdateArmor() {
-        Armor armor = new Armor(null, "gun", "power", this.costume.getId());
+        Armor armor = new Armor(null, "gun", "power",
+                1, 0, this.costume.getId());
         Integer id = this.armorDAO.persist(armor);
         armor.setId(id);
         armor.setArtifact("replace");
@@ -55,7 +57,8 @@ public class ArmorDAOImplTest {
 
     @Test
     public void whenDeleteArmor() {
-        Armor armor = new Armor(null, "delete", "delete", this.costume.getId());
+        Armor armor = new Armor(null, "delete", "delete",
+                1, 0, this.costume.getId());
         Integer id = this.armorDAO.persist(armor);
         armor.setId(id);
         this.armorDAO.delete(armor);
@@ -64,7 +67,8 @@ public class ArmorDAOImplTest {
 
     @Test
     public void findAll() {
-        Armor armor = new Armor(null, "nano coating", "stealth", this.costume.getId());
+        Armor armor = new Armor(null, "nano coating", "stealth",
+                1, 0, this.costume.getId());
         Integer id = this.armorDAO.persist(armor);
         assertTrue(this.armorDAO.findAll().contains(armor));
     }

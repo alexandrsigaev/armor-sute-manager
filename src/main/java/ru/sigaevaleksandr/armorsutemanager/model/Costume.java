@@ -8,17 +8,22 @@ public class Costume {
     private Integer id;
     private String nameCostume;
     private Integer maxCountArmor;
-    private LocalDate createDate;
+    private CostumeType type;
     private List<Armor> armors;
+    private CostumeStatus status;
+    private LocalDate createDate;
 
     public Costume() {
     }
 
-    public Costume(Integer id, String nameCostume, int maxCountArmor, List<Armor> armors) {
+    public Costume(Integer id, String nameCostume, Integer maxCountArmor, CostumeType type, List<Armor> armors,
+                   CostumeStatus status) {
         this.id = id;
         this.nameCostume = nameCostume;
         this.maxCountArmor = maxCountArmor;
+        this.type = type;
         this.armors = armors;
+        this.status = status;
     }
 
     public Integer getId() {
@@ -61,12 +66,28 @@ public class Costume {
         this.armors = armors;
     }
 
+    public CostumeStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CostumeStatus status) {
+        this.status = status;
+    }
+
     public double getLoadArmor() {
         double load = 0;
         if (maxCountArmor != null && armors != null) {
             load = (double) armors.size() / maxCountArmor;
         }
         return load;
+    }
+
+    public CostumeType getType() {
+        return type;
+    }
+
+    public void setType(CostumeType type) {
+        this.type = type;
     }
 
     @Override
@@ -79,12 +100,12 @@ public class Costume {
         }
         Costume costume = (Costume) o;
         return Objects.equals(nameCostume, costume.nameCostume)
-                && Objects.equals(createDate, costume.createDate);
+                && type == costume.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameCostume, createDate);
+        return Objects.hash(nameCostume, type);
     }
 
     @Override
@@ -94,7 +115,6 @@ public class Costume {
                 + ", nameCostume='" + nameCostume + '\''
                 + ", maxCountArmor=" + maxCountArmor
                 + ", createDate=" + createDate
-                + ", armors=" + armors
                 + '}';
     }
 }

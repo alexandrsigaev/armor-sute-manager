@@ -6,14 +6,19 @@ public class Armor {
     private Integer id;
     private String nameArmor;
     private String artifact;
+    private int unitMax;
+    private int unitLeft;
     private Integer idCostume;
+
     public Armor() {
     }
 
-    public Armor(Integer id, String nameArmor, String artifact, Integer idCostume) {
+    public Armor(Integer id, String nameArmor, String artifact, int unitMax, int unitLeft, Integer idCostume) {
         this.id = id;
         this.nameArmor = nameArmor;
         this.artifact = artifact;
+        this.unitMax = unitMax;
+        this.unitLeft = unitLeft;
         this.idCostume = idCostume;
     }
 
@@ -47,6 +52,26 @@ public class Armor {
 
     public void setIdCostume(Integer idCostume) {
         this.idCostume = idCostume;
+    }
+
+    public int getUnitMax() {
+        return unitMax;
+    }
+
+    public void setUnitMax(int unitMax) {
+        this.unitMax = unitMax;
+    }
+
+    public int getUnitLeft() {
+        return unitLeft;
+    }
+
+    public void setUnitLeft(int unitLeft) {
+        this.unitLeft = unitLeft;
+    }
+
+    public double getLoadUnit() {
+        return (double) unitLeft / unitMax;
     }
 
     @Override

@@ -9,6 +9,8 @@ import ru.sigaevaleksandr.armorsutemanager.dao.ArmorDAO;
 import ru.sigaevaleksandr.armorsutemanager.dao.CostumeDAO;
 import ru.sigaevaleksandr.armorsutemanager.model.Armor;
 import ru.sigaevaleksandr.armorsutemanager.model.Costume;
+import ru.sigaevaleksandr.armorsutemanager.model.CostumeStatus;
+import ru.sigaevaleksandr.armorsutemanager.model.CostumeType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,7 +31,8 @@ public class CostumeDAOImplTest {
 
     @Test
     public void whenCostumePersist() {
-        Costume costume = new Costume(null, "MARK_PER", 5, new ArrayList<>());
+        Costume costume = new Costume(null, "MARK_PER", 5,
+                CostumeType.WARRIOR, new ArrayList<>(), CostumeStatus.RELEASE);
         costume.setCreateDate(date);
         Integer id = this.costumeDAO.persist(costume);
         costume.setId(id);
@@ -40,20 +43,26 @@ public class CostumeDAOImplTest {
 
     @Test
     public void whenCostumeUpdate() {
-        Costume costume = new Costume(null, "MARK_UPD", 4, new ArrayList<>());
+        Costume costume = new Costume(null, "MARK_UPD", 4,
+                CostumeType.ASTRONAUT, new ArrayList<>(), CostumeStatus.PROTOTYPE);
         costume.setCreateDate(date);
         Integer id = this.costumeDAO.persist(costume);
         costume.setId(id);
         costume.setMaxCountArmor(6);
+        costume.setType(CostumeType.WARRIOR);
+        costume.setStatus(CostumeStatus.RELEASE);
         this.costumeDAO.update(costume);
         Costume result = this.costumeDAO.findById(id).get();
         assertThat(costume.getMaxCountArmor(), is(result.getMaxCountArmor()));
+        assertThat(costume.getStatus(), is(CostumeStatus.RELEASE));
+        assertThat(costume.getType(), is(CostumeType.WARRIOR));
         assertThat(costume, is(result));
     }
 
     @Test
     public void whenCostumeDelete() {
-        Costume costume = new Costume(null, "MARK_DEL", 6, new ArrayList<>());
+        Costume costume = new Costume(null, "MARK_DEL", 6,
+                CostumeType.WARRIOR, new ArrayList<>(), CostumeStatus.RELEASE);
         costume.setCreateDate(date);
         Integer id = this.costumeDAO.persist(costume);
         costume.setId(id);
@@ -63,11 +72,13 @@ public class CostumeDAOImplTest {
 
     @Test
     public void findCostumesByParam() {
-        Costume costume = new Costume(null, "MARK_FIND_PARAM", 6, new ArrayList<>());
+        Costume costume = new Costume(null, "MARK_FIND_PARAM", 6,
+                CostumeType.WARRIOR, new ArrayList<>(), CostumeStatus.RELEASE);
         costume.setCreateDate(date);
         Integer cosId = this.costumeDAO.persist(costume);
         costume.setId(cosId);
-        Armor armor = new Armor(null, "nano coating", "stealth", costume.getId());
+        Armor armor = new Armor(null, "nano coating", "stealth",
+                1, 0, costume.getId());
         Integer armId = this.armorDAO.persist(armor);
         armor.setId(armId);
         costume.getArmors().add(armor);

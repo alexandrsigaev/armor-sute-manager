@@ -26,13 +26,14 @@ public class ArmorDAOImpl implements ArmorDAO {
     public int persist(Armor entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         // language=sql
-        String persistSql = "insert into armor (id_costume, name_armor, artifact) values (?, ?, ?)";
+        String persistSql = "INSERT INTO armor (id_costume, name_armor, artifact, unit_max) VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
                     .prepareStatement(persistSql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, entity.getIdCostume());
             ps.setString(2, entity.getNameArmor());
             ps.setString(3, entity.getArtifact());
+            ps.setInt(4, entity.getUnitMax());
             return ps;
         }, keyHolder);
         return (Integer) keyHolder.getKeys().get("id");
@@ -41,8 +42,9 @@ public class ArmorDAOImpl implements ArmorDAO {
     @Override
     public int update(Armor entity) {
         // language=sql
-        String persistSql = "update armor set name_armor = ?, artifact = ? where id = ?";
-        return jdbcTemplate.update(persistSql, entity.getNameArmor(), entity.getArtifact(), entity.getId());
+        String persistSql = "UPDATE armor SET name_armor = ?, artifact = ?, unit_max = ? WHERE id = ?";
+        return jdbcTemplate.update(persistSql, entity.getNameArmor(), entity.getArtifact(),
+                entity.getUnitMax(), entity.getId());
     }
 
     @Override

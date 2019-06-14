@@ -13,6 +13,7 @@ public class ArmorMapper implements RowMapper<Armor> {
         armor.setId(rs.getInt("id"));
         armor.setNameArmor(rs.getString("name_armor"));
         armor.setArtifact(rs.getString("artifact"));
+        armor.setUnitMax(rs.getInt("unit_max"));
         armor.setIdCostume(rs.getInt("id_costume"));
         return armor;
     }
