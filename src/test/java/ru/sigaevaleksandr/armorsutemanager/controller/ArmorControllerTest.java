@@ -44,7 +44,7 @@ public class ArmorControllerTest {
         ).andExpect(
                 status().isOk()
         ).andExpect(
-                content().json("[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"idCostume\":1}]")
+                content().json("[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"unitMax\":1,\"unitLeft\":0,\"idCostume\":1,\"loadUnit\":0.0}]")
         );
     }
 
@@ -61,7 +61,7 @@ public class ArmorControllerTest {
         ).andExpect(
                 status().isOk()
         ).andExpect(
-                content().json("{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"idCostume\":1}")
+                content().json("{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"unitMax\":1,\"unitLeft\":0,\"idCostume\":1,\"loadUnit\":0.0}")
         );
     }
 
@@ -74,7 +74,7 @@ public class ArmorControllerTest {
         this.mockMvc.perform(
                 post("/armor/").accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content("{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"idCostume\":1}")
+                        .content("{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"unitMax\":1,\"unitLeft\":0,\"idCostume\":1,\"loadUnit\":0.0}")
         ).andExpect(
                 status().isCreated()
         );
@@ -85,7 +85,7 @@ public class ArmorControllerTest {
         this.mockMvc.perform(
                 put("/armor/").accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content("{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"idCostume\":1}")
+                        .content("{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"unitMax\":1,\"unitLeft\":0,\"idCostume\":1,\"loadUnit\":0.0}")
         ).andExpect(
                 status().isOk()
         );

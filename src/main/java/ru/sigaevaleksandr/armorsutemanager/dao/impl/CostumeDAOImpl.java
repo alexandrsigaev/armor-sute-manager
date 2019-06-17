@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.sigaevaleksandr.armorsutemanager.dao.CostumeDAO;
 import ru.sigaevaleksandr.armorsutemanager.dao.util.CostumeExtractor;
 import ru.sigaevaleksandr.armorsutemanager.model.Costume;
+import ru.sigaevaleksandr.armorsutemanager.model.CostumeType;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -92,5 +93,15 @@ public class CostumeDAOImpl implements CostumeDAO {
                         + "order by c.name_costume";
 
         return this.jdbcTemplate.query(findCostumesByParam, new Object[] {"%" + param + "%"}, new CostumeExtractor());
+    }
+
+    @Override
+    public List<Costume> findCostumesByType(CostumeType type) {
+        // language=sql
+        String findCostumeByIdSql = "select c.id as id_cos, c.name_costume, c.max_count_armor, c.type, c.status,"
+                + " c.create_user_date, a.id as id_arm, a.name_armor, a.artifact, a.unit_max"
+                + " from costume c left join armor a on c.id = a.id_costume where c.type = ?";
+
+        return this.jdbcTemplate.query(findCostumeByIdSql, new Object[]{type.toString()}, new CostumeExtractor());
     }
 }

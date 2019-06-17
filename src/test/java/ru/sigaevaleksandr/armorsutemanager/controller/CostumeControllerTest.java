@@ -49,9 +49,10 @@ public class CostumeControllerTest {
         ).andExpect(
                 status().isOk()
         ).andExpect(
-                content().json("[{\"id\":1,\"nameCostume\":\"MARK1\",\"maxCountArmor\":3,\"createDate\""
-                        + ":null,\"armors\":[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"idCostume\":1}],"
-                        + "\"loadArmor\":0.3333333333333333}]")
+                content().json("[{\"id\":1,\"nameCostume\":\"MARK1\",\"maxCountArmor\":3,\"type\":\"WARRIOR\","
+                        + "\"armors\":[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\","
+                        + "\"unitMax\":1,\"unitLeft\":0,\"idCostume\":1,\"loadUnit\":0.0}],"
+                        + "\"status\":\"RELEASE\",\"createDate\":null,\"loadArmor\":\"0\"}]")
         );
 
     }
@@ -61,49 +62,53 @@ public class CostumeControllerTest {
         Armor armor = new Armor(1, "test", "test", 1, 0, 1);
         Costume costume = new Costume(1, "MARK1", 3, CostumeType.WARRIOR,
                 Lists.newArrayList(armor), CostumeStatus.RELEASE);
-        given(this.costumeService.findByArtifact("test"))
+        given(this.costumeService.getCostumesByArtifact("test"))
                 .willReturn(
                         new ArrayList<>(Lists.newArrayList(costume))
                 );
 
         this.mockMvc.perform(
-                get("/costume/find").param("param", "test")
+                get("/costume/find_by_artifact/").param("param", "test")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
         ).andExpect(
                 status().isOk()
         ).andExpect(
-                content().json("[{\"id\":1,\"nameCostume\":\"MARK1\",\"maxCountArmor\":3,\"createDate\""
-                        + ":null,\"armors\":[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"idCostume\":1}],"
-                        + "\"loadArmor\":0.3333333333333333}]")
+                content().json("[{\"id\":1,\"nameCostume\":\"MARK1\",\"maxCountArmor\":3,\"type\":\"WARRIOR\","
+                        + "\"armors\":[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\","
+                        + "\"unitMax\":1,\"unitLeft\":0,\"idCostume\":1,\"loadUnit\":0.0}],"
+                        + "\"status\":\"RELEASE\",\"createDate\":null,\"loadArmor\":\"0\"}]")
         );
     }
 
     @Test
-    public void whenGetArmorLoad() throws Exception {
+    public void whenFindByCostumeType() throws Exception {
         Armor armor = new Armor(1, "test", "test", 1, 0, 1);
         Costume costume = new Costume(1, "MARK1", 3, CostumeType.WARRIOR,
                 Lists.newArrayList(armor), CostumeStatus.RELEASE);
-
-        given(this.costumeService.armorLoad(1))
+        given(this.costumeService.getCostumesByType("warrior"))
                 .willReturn(
-                        1d
+                        new ArrayList<>(Lists.newArrayList(costume))
                 );
 
         this.mockMvc.perform(
-                get("/costume/fullness/1").accept(MediaType.APPLICATION_JSON_UTF8)
+                get("/costume/find_by_type/").param("type", "warrior")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
         ).andExpect(
                 status().isOk()
         ).andExpect(
-                content().json("{\"percent\":\"100\"}")
+                content().json("[{\"id\":1,\"nameCostume\":\"MARK1\",\"maxCountArmor\":3,\"type\":\"WARRIOR\","
+                        + "\"armors\":[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\","
+                        + "\"unitMax\":1,\"unitLeft\":0,\"idCostume\":1,\"loadUnit\":0.0}],"
+                        + "\"status\":\"RELEASE\",\"createDate\":null,\"loadArmor\":\"0\"}]")
         );
     }
 
     @Test
-    public void whenFindById() throws Exception {
-        Armor armor = new Armor(1, "test", "test", 1, 0, 1);
-        Costume costume = new Costume(1, "MARK1", 3, CostumeType.WARRIOR,
+    public void whenGetCostume() throws Exception {
+        Armor armor = new Armor(1, "test", "test", 1, 1, 1);
+        Costume costume = new Costume(1, "MARK1", 1, CostumeType.WARRIOR,
                 Lists.newArrayList(armor), CostumeStatus.RELEASE);
-        given(this.costumeService.findById(1))
+        given(this.costumeService.getCostume(1))
                 .willReturn(
                         Optional.of(costume)
                 );
@@ -113,9 +118,10 @@ public class CostumeControllerTest {
         ).andExpect(
                 status().isOk()
         ).andExpect(
-                content().json("{\"id\":1,\"nameCostume\":\"MARK1\",\"maxCountArmor\":3,\"createDate\""
-                        + ":null,\"armors\":[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"idCostume\":1}],"
-                        + "\"loadArmor\":0.3333333333333333}")
+                content().json("{\"id\":1,\"nameCostume\":\"MARK1\",\"maxCountArmor\":1,\"type\":\"WARRIOR\","
+                        + "\"armors\":[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\","
+                        + "\"unitMax\":1,\"unitLeft\":1,\"idCostume\":1,\"loadUnit\":1}],"
+                        + "\"status\":\"RELEASE\",\"createDate\":null,\"loadArmor\":\"100\"}")
         );
     }
 
@@ -130,9 +136,10 @@ public class CostumeControllerTest {
         this.mockMvc.perform(
                 post("/costume/").accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content("{\"id\":1,\"nameCostume\":\"MARK1\",\"maxCountArmor\":3,\"createDate\""
-                                + ":null,\"armors\":[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"idCostume\":1}],"
-                                + "\"loadArmor\":0.3333333333333333}")
+                        .content("{\"id\":1,\"nameCostume\":\"MARK1\",\"maxCountArmor\":3,\"type\":\"WARRIOR\","
+                                + "\"armors\":[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\","
+                                + "\"unitMax\":1,\"unitLeft\":0,\"idCostume\":1,\"loadUnit\":0.0}],"
+                                + "\"status\":\"RELEASE\",\"createDate\":null}")
         ).andExpect(
                 status().isCreated()
         );
@@ -143,9 +150,10 @@ public class CostumeControllerTest {
         this.mockMvc.perform(
                 put("/costume/").accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content("{\"id\":1,\"nameCostume\":\"MARK1\",\"maxCountArmor\":3,\"createDate\""
-                                + ":null,\"armors\":[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\",\"idCostume\":1}],"
-                                + "\"loadArmor\":0.3333333333333333}")
+                        .content("{\"id\":1,\"nameCostume\":\"MARK1\",\"maxCountArmor\":3,\"type\":\"WARRIOR\","
+                                + "\"armors\":[{\"id\":1,\"nameArmor\":\"test\",\"artifact\":\"test\","
+                                + "\"unitMax\":1,\"unitLeft\":0,\"idCostume\":1,\"loadUnit\":0.0}],"
+                                + "\"status\":\"RELEASE\",\"createDate\":null}")
         ).andExpect(
                 status().isOk()
         );

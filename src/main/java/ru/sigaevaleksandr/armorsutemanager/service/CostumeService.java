@@ -9,9 +9,9 @@ import java.util.Optional;
 public interface CostumeService {
 
     List<Costume> findAll();
-    Optional<Costume> findById(int id);
+    Optional<Costume> getCostume(int id) throws NotFoundException;
     Costume save(Costume costume);
     void delete(Costume costume);
-    List<Costume> findByArtifact(String param);
-    double armorLoad(int id) throws NotFoundException;
+    List<Costume> getCostumesByArtifact(String param);
+    List<Costume> getCostumesByType(String type);
 }

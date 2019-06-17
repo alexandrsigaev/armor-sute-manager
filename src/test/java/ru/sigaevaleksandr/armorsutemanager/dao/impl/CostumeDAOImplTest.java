@@ -83,6 +83,5 @@ public class CostumeDAOImplTest {
         armor.setId(armId);
         costume.getArmors().add(armor);
         assertTrue(this.costumeDAO.findCostumesByParam("stealth").contains(costume));
-
     }
 }

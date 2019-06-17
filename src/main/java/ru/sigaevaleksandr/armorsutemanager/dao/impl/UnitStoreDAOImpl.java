@@ -40,8 +40,8 @@ public class UnitStoreDAOImpl implements UnitStoreDAO {
     @Override
     public int update(UnitStore entity) {
         // language=sql
-        String persistSql = "UPDATE store SET left_amount = ? where id_armor = ?";
-        return jdbcTemplate.update(persistSql, entity.getAmountLeftInStorage(), entity.getArmorId());
+        String updateSql = "UPDATE store SET left_amount = ? where id = ?";
+        return jdbcTemplate.update(updateSql, entity.getAmountLeftInStorage(), entity.getId());
     }
 
     @Override
@@ -54,8 +54,8 @@ public class UnitStoreDAOImpl implements UnitStoreDAO {
     @Override
     public int delete(UnitStore entity) {
         // language=sql
-        String persistSql = "delete from store where id = ?";
-        return jdbcTemplate.update(persistSql, entity.getId());
+        String deleteSql = "delete from store where id = ?";
+        return jdbcTemplate.update(deleteSql, entity.getId());
     }
 
     @Override
@@ -63,5 +63,20 @@ public class UnitStoreDAOImpl implements UnitStoreDAO {
         // language=sql
         String findAll = "select * from store";
         return jdbcTemplate.query(findAll, new UnitStoreMapper());
+    }
+
+    @Override
+    public int updateLeftAmountByArmorId(UnitStore store) {
+        // language=sql
+        String updateByArmorIdSql = "UPDATE store SET left_amount = ? where id_armor = ?";
+        return jdbcTemplate.update(updateByArmorIdSql, store.getAmountLeftInStorage(), store.getArmorId());
+    }
+
+    @Override
+    public Optional<UnitStore> findByArmorId(int armorId) {
+        // language=sql
+        String findByIdSql = "SELECT * FROM store WHERE id_armor = ?";
+        return Optional.ofNullable(jdbcTemplate.queryForObject(findByIdSql,
+                new Object[] {armorId}, new UnitStoreMapper()));
     }
 }

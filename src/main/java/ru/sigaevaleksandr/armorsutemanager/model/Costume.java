@@ -74,12 +74,16 @@ public class Costume {
         this.status = status;
     }
 
-    public double getLoadArmor() {
+    public String getLoadArmor() {
         double load = 0;
         if (maxCountArmor != null && armors != null) {
-            load = (double) armors.size() / maxCountArmor;
+            double tmp = 0d;
+            for (Armor arm : this.armors) {
+                tmp += arm.getLoadUnit();
+            }
+            load = tmp / maxCountArmor;
         }
-        return load;
+        return String.format("%.0f", load * 100);
     }
 
     public CostumeType getType() {

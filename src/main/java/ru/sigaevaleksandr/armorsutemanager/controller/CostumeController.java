@@ -7,7 +7,9 @@ import ru.sigaevaleksandr.armorsutemanager.exeption.NotFoundException;
 import ru.sigaevaleksandr.armorsutemanager.model.Costume;
 import ru.sigaevaleksandr.armorsutemanager.service.CostumeService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/costume")
@@ -24,20 +26,19 @@ public class CostumeController {
         return new ArrayList<>(this.costumeService.findAll());
     }
 
-    @GetMapping("/find")
+    @GetMapping("/find_by_artifact")
     public List<Costume> findByArtifact(@RequestParam(name = "param") String param) {
-        return new ArrayList<>(this.costumeService.findByArtifact(param));
+        return new ArrayList<>(this.costumeService.getCostumesByArtifact(param));
     }
 
-    @GetMapping("/fullness/{id}")
-    public Map<String, String> getArmorLoad(@PathVariable int id) throws NotFoundException {
-        double load = this.costumeService.armorLoad(id);
-        return Collections.singletonMap("percent", String.format("%.0f", (load * 100)));
+    @GetMapping("/find_by_type")
+    public List<Costume> findByCostumeType(@RequestParam(name = "type") String param) {
+        return new ArrayList<>(this.costumeService.getCostumesByType(param));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Costume> findById(@PathVariable int id) {
-        Optional<Costume> costume = this.costumeService.findById(id);
+    public ResponseEntity<Costume> completeCostumeById(@PathVariable int id) throws NotFoundException {
+        Optional<Costume> costume = this.costumeService.getCostume(id);
         return new ResponseEntity<>(
                 costume.orElse(new Costume()),
                 costume.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND

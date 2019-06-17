@@ -1,9 +1,14 @@
 package ru.sigaevaleksandr.armorsutemanager.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sigaevaleksandr.armorsutemanager.dao.CostumeDAO;
+import ru.sigaevaleksandr.armorsutemanager.dao.UnitStoreDAO;
 import ru.sigaevaleksandr.armorsutemanager.exeption.NotFoundException;
+import ru.sigaevaleksandr.armorsutemanager.model.Armor;
 import ru.sigaevaleksandr.armorsutemanager.model.Costume;
+import ru.sigaevaleksandr.armorsutemanager.model.CostumeType;
+import ru.sigaevaleksandr.armorsutemanager.model.UnitStore;
 import ru.sigaevaleksandr.armorsutemanager.service.CostumeService;
 
 import java.util.List;
@@ -13,11 +18,12 @@ import java.util.Optional;
 public class CostumeServiceImpl implements CostumeService {
 
     private final CostumeDAO costumeDAO;
+    private final UnitStoreDAO unitStoreDAO;
 
-    public CostumeServiceImpl(CostumeDAO costumeDAO) {
+    public CostumeServiceImpl(CostumeDAO costumeDAO, UnitStoreDAO unitStoreDAO) {
         this.costumeDAO = costumeDAO;
+        this.unitStoreDAO = unitStoreDAO;
     }
-
 
     @Override
     public List<Costume> findAll() {
@@ -25,8 +31,14 @@ public class CostumeServiceImpl implements CostumeService {
     }
 
     @Override
-    public Optional<Costume> findById(int id) {
-        return this.costumeDAO.findById(id);
+    @Transactional
+    public Optional<Costume> getCostume(int id) throws NotFoundException {
+        Optional<Costume> res = this.costumeDAO.findById(id);
+        if (!res.isPresent()) {
+            throw new NotFoundException(String.format("Costume with id %s if not found", id));
+        }
+        this.complete(res.get());
+        return res;
     }
 
     @Override
@@ -42,16 +54,33 @@ public class CostumeServiceImpl implements CostumeService {
     }
 
     @Override
-    public List<Costume> findByArtifact(String param) {
+    public List<Costume> getCostumesByArtifact(String param) {
         return this.costumeDAO.findCostumesByParam(param);
     }
 
     @Override
-    public double armorLoad(int id) throws NotFoundException {
-        Optional<Costume> costume = this.findById(id);
-        if (!costume.isPresent()) {
-            throw new NotFoundException(String.format("Costume with id %s if not found", id));
+    public List<Costume> getCostumesByType(String type) {
+        CostumeType costumeType = CostumeType.valueOf(type.toUpperCase());
+        return this.costumeDAO.findCostumesByType(costumeType);
+    }
+
+    private void complete(Costume costume) {
+        List<Armor> armors = costume.getArmors();
+        for (Armor arm : armors) {
+            Optional<UnitStore> storeCandidate = this.unitStoreDAO.findByArmorId(arm.getId());
+            if (storeCandidate.isPresent()) {
+                UnitStore store = storeCandidate.get();
+                int amountLeft = store.getAmountLeftInStorage();
+                if (amountLeft <= arm.getUnitMax()) {
+                    arm.setUnitLeft(amountLeft);
+                    store.setAmountLeftInStorage(0);
+                } else {
+                    amountLeft -= arm.getUnitMax();
+                    arm.setUnitLeft(arm.getUnitMax());
+                    store.setAmountLeftInStorage(amountLeft);
+                }
+                this.unitStoreDAO.update(store);
+            }
         }
-        return costume.get().getLoadArmor();
     }
 }
